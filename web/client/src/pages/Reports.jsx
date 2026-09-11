@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { useGet } from '../hooks.js';
 import { api, CATEGORY_LABEL, firstOfMonth, fmt, today } from '../api.js';
 import { ErrorBox, Loading, Page } from '../components.jsx';
@@ -10,27 +10,39 @@ const TABS = [
   { key: 'out', label: 'Outgoing goods' },
 ];
 
+// Report state lives in the URL so a specific report can be bookmarked or
+// sent to a customs officer as a link: /reports?tab=mutation&category=FG&from=…&to=…
 export default function Reports() {
-  const [tab, setTab] = useState('mutation');
-  const [from, setFrom] = useState(firstOfMonth());
-  const [to, setTo] = useState(today());
-  const [category, setCategory] = useState('RAW');
+  const [params, setParams] = useSearchParams();
+  const tab = params.get('tab') || 'mutation';
+  const from = params.get('from') || firstOfMonth();
+  const to = params.get('to') || today();
+  const category = params.has('category') ? params.get('category') : 'RAW';
+
+  const update = (patch) => {
+    const next = new URLSearchParams(params);
+    for (const [k, v] of Object.entries(patch)) {
+      if (v === null || v === undefined) next.delete(k); else next.set(k, v);
+    }
+    setParams(next, { replace: true });
+  };
+  const switchTab = (key) => update({ tab: key, ...(key !== 'position' && category === '' ? { category: 'RAW' } : {}) });
 
   return (
     <Page title="Customs reports" subtitle="The four reports an IT-inventory system must produce for Bea Cukai. Each is one query; each exports to CSV.">
       <div className="tabs">
-        {TABS.map((t) => <button key={t.key} className={tab === t.key ? 'active' : ''} onClick={() => setTab(t.key)}>{t.label}</button>)}
+        {TABS.map((t) => <button key={t.key} className={tab === t.key ? 'active' : ''} onClick={() => switchTab(t.key)}>{t.label}</button>)}
       </div>
       <div className="filters">
         {tab !== 'position' && (
           <>
-            <label>From<input type="date" value={from} onChange={(e) => setFrom(e.target.value)} /></label>
-            <label>To<input type="date" value={to} onChange={(e) => setTo(e.target.value)} /></label>
+            <label>From<input type="date" value={from} onChange={(e) => update({ from: e.target.value })} /></label>
+            <label>To<input type="date" value={to} onChange={(e) => update({ to: e.target.value })} /></label>
           </>
         )}
         {(tab === 'mutation' || tab === 'position') && (
           <label>Category
-            <select value={category} onChange={(e) => setCategory(e.target.value)}>
+            <select value={category} onChange={(e) => update({ category: e.target.value })}>
               {tab === 'position' && <option value="">All</option>}
               {Object.entries(CATEGORY_LABEL).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>

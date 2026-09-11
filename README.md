@@ -118,7 +118,32 @@ Same code, same schema builder, same seed. This is usually the first question a 
 
 ## Screenshots
 
-_To be added after the first run: dashboard, the failed post with the shortage table, the finished-goods mutation report._
+**Dashboard.** Balances by category, derived live from the ledger; the two open drafts; the locked periods.
+
+![Dashboard](docs/screenshots/dashboard.png)
+
+**Documents.** Four months of a garment factory: imports (BC 2.3), local purchases (BC 4.0), production batches, exports (BC 3.0), a duty-paid local release (BC 2.5), a transfer to another bonded zone (BC 2.7), and a stock-take.
+
+![Documents](docs/screenshots/documents.png)
+
+**A draft that will not post.** 800 trousers requested against a balance of 550. Posting it returns the following and writes nothing:
+
+```json
+{
+  "error": "Insufficient stock; nothing was posted",
+  "details": {
+    "shortages": [
+      { "item_code": "TRS-001", "item_name": "Men's twill work trousers", "balance": 550, "requested": 800 }
+    ]
+  }
+}
+```
+
+![Short draft](docs/screenshots/short-draft.png)
+
+**Finished-goods mutation report for August 2026,** opened from a URL (`/reports?tab=mutation&category=FG&from=2026-08-01&to=2026-08-31`), exported to CSV with one click.
+
+![Finished-goods mutation report](docs/screenshots/report-fg.png)
 
 ---
 

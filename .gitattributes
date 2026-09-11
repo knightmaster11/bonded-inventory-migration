@@ -1,0 +1,11 @@
+# Normalise line endings in the repository; check out as LF everywhere.
+* text=auto eol=lf
+
+# VB6 sources are historically CRLF and the IDE expects it.
+legacy/*.frm text eol=crlf
+legacy/*.bas text eol=crlf
+
+# Binary assets
+*.png binary
+*.jpg binary
+*.sqlite binary

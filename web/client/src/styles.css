@@ -29,7 +29,7 @@ h2 { font-size: 13px; font-weight: 600; letter-spacing: .08em; text-transform: u
 h2 .hint { font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 10px; }
 .muted { color: var(--ink-3); }
 .mono { font-family: var(--f-mono); font-size: 13px; }
-.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); font-size: 13px; }
+.num { text-align: right; font-variant-numeric: tabular-nums; font-family: var(--f-mono); font-size: 13px; white-space: nowrap; }
 .neg { color: var(--red); }
 .empty { padding: 24px 0; }
 
