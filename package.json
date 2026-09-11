@@ -1,0 +1,16 @@
+{
+  "name": "bonded-inventory-migration",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Case study: a VB6 + Access bonded-warehouse inventory system, rebuilt as a React + Express web application.",
+  "scripts": {
+    "install:all": "npm install && cd web/server && npm install && cd ../client && npm install",
+    "dev": "concurrently -n server,client -c blue,green \"npm --prefix web/server run dev\" \"npm --prefix web/client run dev\"",
+    "build": "npm --prefix web/client run build",
+    "start": "npm --prefix web/server start",
+    "reset": "npm --prefix web/server run reset"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}
